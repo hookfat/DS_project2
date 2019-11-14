@@ -61,7 +61,9 @@ public:
     void start();
     void to_far();
     void roaming();
-    void recharge();
+    int recharge();
+    void showpath();
+    Point* find_way();//盡力找到最近的沒走過的點
 private:
     char** road;
     int** bfs_map;
@@ -69,7 +71,10 @@ private:
     int total_0;
     node** bfs_to_R;
     Point* R_point;
-    Point* far_point;
+    int far_point;
+    int far_limit;
+    Point* now_pos;
+    int now_step;
     node* path;
     node* path_last;
     int step;

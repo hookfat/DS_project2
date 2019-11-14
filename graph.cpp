@@ -191,6 +191,12 @@ void graph::BFS()
         }
         q1.pop();
     }
+    for(int i = 0; i<total_0; i++){
+        if(bfs_to_R[i] == nullptr){
+            far_limit = i-1;
+            break;
+        }
+    }
 }
 
 void graph::show_bfs_list()
@@ -216,6 +222,10 @@ graph::graph()
     path = nullptr;
     path_last = path;
     readmap();
+    now_pos = new Point;
+    now_pos->x = R_point->x;
+    now_pos->y = R_point->y;
+    now_step = 0;
 }
 
 graph::~graph()
@@ -229,6 +239,7 @@ graph::~graph()
 void graph::walk(Point* p)
 {
     step++;
+    now_step++;
     if(path != nullptr){
         path_last->next = new node(p);
         path_last = path_last->next;
@@ -236,5 +247,35 @@ void graph::walk(Point* p)
     else{
         path = new node(p);
         path_last = path;
+    }
+    if(road[p->x][p->y] == '0'){
+        road[p->x][p->y] = 'T';
+        total_0--;
+        node* temp = bfs_to_R[bfs_map[p->x][p->y]];
+        node* temp1 = nullptr;
+        while(temp->data->x != p->x && temp->data->y != p->y){
+            temp1 = temp;
+            temp = temp->next;
+        }
+        if(temp != bfs_to_R[bfs_map[p->x][p->y]]){
+            temp1->next = temp->next;
+            delete temp;
+        }
+        else{
+            bfs_to_R[bfs_map[p->x][p->y]] = temp->next;
+            delete temp;
+        }
+    }
+
+
+}
+
+void graph::showpath()
+{
+    cout << step << endl;
+    node* temp = path;
+    while(temp != nullptr){
+        cout << "(" << path->data->x << "," << path->data->y << ")" << endl;
+        temp = temp->next;
     }
 }
