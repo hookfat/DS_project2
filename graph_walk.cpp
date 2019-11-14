@@ -1,40 +1,41 @@
 #include "p2.h"
 #include <iostream>
 
-void graph::start()
+void graph::impl()
 {
     while(total_0 != 0){
         to_far();
-        roaming();
     }
 }
 
-void graph::to_far() //±q³Ì»·ªºÂI§ä¤@±ø¸ô¦^¨ÓR
+void graph::to_far() //å¾æœ€é çš„é»æ‰¾ä¸€æ¢è·¯å›ä¾†R
 {
+    int far_len = 0;
     for(int i = 1; i<=far_limit; i++){
-        if(bfs_to_R[i] != nullptr){
-            far_point = i;
-        }
+        if(bfs_to_R[i] != nullptr)
+            far_len = i;
     }
-    Point *p = bfs_to_R[far_point]->data;
-    node* far_way = new node(p);
-    node* temp = nullptr;
-    //±q³Ì»·ªºÂI°f±À¤@±ø¸ô¦^¨Ó ¨Ã¥B¦s¦bfar_way¸Ì­±
-    for(int i = 0; i<far_point; i++){
-        int buf[4];
-        int len = bfs_map[p->x][p->y];
-        for(int j = 0; j<4; j++){
-            buf[j] = -1;
-        }
-        if(p->x - 1 > 0){
-            if(bfs_map[p->x-1][p->y] == len-1){
-                if(road[p->x-1][p->y] == '0' || road[p->x-1][p->y] == 'R'){
-                    temp = new node();
-                    temp->data->x = p->x-1;
-                    temp->data->y = p->y;
-                    temp->next = far_way;
-                    far_way = temp;
-                    p = temp->data;
+    node* start = bfs_to_R[far_len];
+
+    node* the_way = new node();
+    the_way->data->x = start->data->x;
+    the_way->data->y = start->data->y;
+    node* the_way_start = the_way;
+    //é¸æ“‡èƒ½èµ°çš„è·¯ï¼Œé•·åº¦å¿…é ˆæ˜¯ç›®å‰é•·åº¦æ¸›ä¸€
+    //æœ€å¥½é‚„æ˜¯æ²’èµ°éçš„è·¯
+    int now_far = far_len;
+    for(int i = 1; i<far_len; i++, now_far--){
+        int nx = the_way_start->data->x;
+        int ny = the_way_start->data->y;
+        int buf[4] = {0};
+        if(nx - 1 > 0){
+            if(bfs_map[nx-1][ny] == now_far-1){
+                if(road[nx-1][ny] == 'R' || road[nx-1][ny] == '0'){
+                    the_way_start = new node();
+                    the_way_start->next = the_way;
+                    the_way_start->data->x = nx-1;
+                    the_way_start->data->y = ny;
+                    the_way = the_way_start;
                     continue;
                 }
                 else{
@@ -42,97 +43,91 @@ void graph::to_far() //±q³Ì»·ªºÂI§ä¤@±ø¸ô¦^¨ÓR
                 }
             }
         }
-        if(p->x + 1 < x){
-            if(bfs_map[p->x+1][p->y] == len-1){
-                if(road[p->x+1][p->y] == '0' || road[p->x+1][p->y] == 'R'){
-                    temp = new node();
-                    temp->data->x = p->x+1;
-                    temp->data->y = p->y;
-                    temp->next = far_way;
-                    far_way = temp;
-                    p = temp->data;
+        if(nx + 1 < x){
+            if(bfs_map[nx+1][ny] == now_far-1){
+                if(road[nx+1][ny] == 'R' || road[nx+1][ny] == '0'){
+                    the_way_start = new node();
+                    the_way_start->next = the_way;
+                    the_way_start->data->x = nx+1;
+                    the_way_start->data->y = ny;
+                    the_way = the_way_start;
                     continue;
                 }
                 else{
-                    buf[0] = 1;
+                    buf[1] = 1;
                 }
             }
         }
-        if(p->y - 1 > 0){
-            if(bfs_map[p->x][p->y-1] == len-1){
-                if(road[p->x][p->y-1] == '0' || road[p->x][p->y-1] == 'R'){
-                    temp = new node();
-                    temp->data->x = p->x;
-                    temp->data->y = p->y-1;
-                    temp->next = far_way;
-                    far_way = temp;
-                    p = temp->data;
+        if(ny - 1 > 0){
+            if(bfs_map[nx][ny-1] == now_far-1){
+                if(road[nx][ny-1] == 'R' || road[nx][ny-1] == '0'){
+                    the_way_start = new node();
+                    the_way_start->next = the_way;
+                    the_way_start->data->x = nx;
+                    the_way_start->data->y = ny-1;
+                    the_way = the_way_start;
                     continue;
                 }
                 else{
-                    buf[0] = 1;
+                    buf[2] = 1;
                 }
             }
         }
-        if(p->y + 1 < y){
-            if(bfs_map[p->x][p->y+1] == len-1){
-                if(road[p->x][p->y+1] == '0' || road[p->x][p->y+1] == 'R'){
-                    temp = new node();
-                    temp->data->x = p->x;
-                    temp->data->y = p->y+1;
-                    temp->next = far_way;
-                    far_way = temp;
-                    p = temp->data;
+        if(ny + 1 < y){
+            if(bfs_map[nx][ny+1] == now_far-1){
+                if(road[nx][ny+1] == 'R' || road[nx][ny+1] == '0'){
+                    the_way_start = new node();
+                    the_way_start->next = the_way;
+                    the_way_start->data->x = nx;
+                    the_way_start->data->y = ny+1;
+                    the_way = the_way_start;
                     continue;
                 }
                 else{
-                    buf[0] = 1;
+                    buf[3] = 1;
                 }
             }
         }
         if(buf[0] == 1){
-            temp = new node();
-            temp->data->x = p->x-1;
-            temp->data->y = p->y;
-            temp->next = far_way;
-            far_way = temp;
-            p = temp->data;
+            the_way_start = new node();
+            the_way_start->next = the_way;
+            the_way_start->data->x = nx-1;
+            the_way_start->data->y = ny;
+            the_way = the_way_start;
         }
         else if(buf[1] == 1){
-            temp = new node();
-            temp->data->x = p->x+1;
-            temp->data->y = p->y;
-            temp->next = far_way;
-            far_way = temp;
-            p = temp->data;
+            the_way_start = new node();
+            the_way_start->next = the_way;
+            the_way_start->data->x = nx+1;
+            the_way_start->data->y = ny;
+            the_way = the_way_start;
         }
         else if(buf[2] == 1){
-            temp = new node();
-            temp->data->x = p->x;
-            temp->data->y = p->y-1;
-            temp->next = far_way;
-            far_way = temp;
-            p = temp->data;
+            the_way_start = new node();
+            the_way_start->next = the_way;
+            the_way_start->data->x = nx;
+            the_way_start->data->y = ny-1;
+            the_way = the_way_start;
         }
         else if(buf[3] == 1){
-            temp = new node();
-            temp->data->x = p->x;
-            temp->data->y = p->y+1;
-            temp->next = far_way;
-            far_way = temp;
-            p = temp->data;
+            the_way_start = new node();
+            the_way_start->next = the_way;
+            the_way_start->data->x = nx;
+            the_way_start->data->y = ny+1;
+            the_way = the_way_start;
         }
     }
-    //end
-    while(far_way != nullptr){
-        walk(far_way->data);
-        temp = far_way;
-        far_way = far_way->next;
-        delete temp;
+
+    while(the_way != nullptr){
+        walk(the_way->data);
+        the_way_start = the_way;
+        the_way = the_way->next;
+        delete the_way_start;
     }
+
 }
 
-int graph::recharge() //¶Ç¤J¥Ø«eªº¦ì¸m ¦pªG»İ­n´Nªğ¦^¥R¹q
+int graph::recharge() //å‚³å…¥ç›®å‰çš„ä½ç½® å¦‚æœéœ€è¦å°±è¿”å›å……é›»
 {
     if((battery - now_step) > bfs_map[now_pos->x][now_pos->y]){
         return 0;
@@ -142,15 +137,7 @@ int graph::recharge() //¶Ç¤J¥Ø«eªº¦ì¸m ¦pªG»İ­n´Nªğ¦^¥R¹q
     }
 }
 
-void graph::roaming()
-{
-    Point* p = new Point;
-    while(!recharge())
-    {
 
-    }
-    delete p;
-}
 
 Point* graph::find_way()
 {

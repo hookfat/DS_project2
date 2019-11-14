@@ -54,7 +54,7 @@ void graph::BFS()
     bfs_to_R = new node*[total_0];
     node* last[total_0];
     bfs_to_R[0] = new node(R_point);
-    for(int i = 1; i<total_0; i++){
+    for(int i = 1; i<=total_0; i++){
         bfs_to_R[i] = nullptr;
     }
     myqueue q1;
@@ -191,17 +191,19 @@ void graph::BFS()
         }
         q1.pop();
     }
-    for(int i = 0; i<total_0; i++){
+    for(int i = 1; i<=total_0; i++){
         if(bfs_to_R[i] == nullptr){
             far_limit = i-1;
             break;
         }
+        else
+            far_limit = i;
     }
 }
 
 void graph::show_bfs_list()
 {
-    for(int i = 1; i<total_0; i++){
+    for(int i = 1; i<=total_0; i++){
         if(bfs_to_R[i] == nullptr)
             break;
         else{
@@ -266,8 +268,6 @@ void graph::walk(Point* p)
             delete temp;
         }
     }
-
-
 }
 
 void graph::showpath()
@@ -275,7 +275,7 @@ void graph::showpath()
     cout << step << endl;
     node* temp = path;
     while(temp != nullptr){
-        cout << "(" << path->data->x << "," << path->data->y << ")" << endl;
+        cout << temp->data->x << " " << temp->data->y << endl;
         temp = temp->next;
     }
 }
