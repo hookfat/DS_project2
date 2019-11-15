@@ -5,8 +5,8 @@ void graph::impl()
 {
     while(total_0 != 0){
         to_far();
-        cout << total_0 << endl;
     }
+    //cout << "QQ";
 }
 
 void graph::to_far() //從最遠的點找一條路回來R
@@ -119,28 +119,24 @@ void graph::to_far() //從最遠的點找一條路回來R
         }
     }
 
+    node** temp = new node*[far_len];
+    the_way_start = the_way;
+    for(int i = 0; i<far_len; i++){
+        temp[i] = the_way_start;
+        the_way_start = the_way_start->next;
+    }
+    for(int i = 0; i<far_len; i++){
+        walk(temp[i]->data);
+    }
+    for(int i = far_len-2; i>=0; i--){
+        walk(temp[i]->data);
+    }
     while(the_way != nullptr){
-        walk(the_way->data);
         the_way_start = the_way;
         the_way = the_way->next;
-        delete the_way_start;
     }
-
-}
-
-int graph::recharge() //傳入目前的位置 如果需要就返回充電
-{
-    if((battery - now_step) > bfs_map[now_pos->x][now_pos->y]){
-        return 0;
-    }
-    else{
-
-    }
+    walk(R_point);
+    delete []temp;
 }
 
 
-
-Point* graph::find_way()
-{
-
-}
