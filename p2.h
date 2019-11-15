@@ -58,16 +58,16 @@ public:
     void BFS();
     void show_bfs_list();
     void walk(Point*);
-    void start();
+    void impl();
     void to_far();
     void roaming();
     int recharge();
     void showpath();
-    Point* find_way();//ºÉ¤O§ä¨ì³Ìªñªº¨S¨«¹LªºÂI
+    Point* find_way();//ç›¡åŠ›æ‰¾åˆ°æœ€è¿‘çš„æ²’èµ°éçš„é»
 private:
     char** road;
     int** bfs_map;
-    int x, y, battery; //x¬O©¹¤U¼Æªº
+    int x, y, battery; //xæ˜¯å¾€ä¸‹æ•¸çš„
     int total_0;
     node** bfs_to_R;
     Point* R_point;

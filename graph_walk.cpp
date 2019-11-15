@@ -5,6 +5,7 @@ void graph::impl()
 {
     while(total_0 != 0){
         to_far();
+        cout << total_0 << endl;
     }
 }
 

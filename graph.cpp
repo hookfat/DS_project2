@@ -242,6 +242,7 @@ void graph::walk(Point* p)
 {
     step++;
     now_step++;
+    //cout << p->x << " " << p->y << endl;
     if(path != nullptr){
         path_last->next = new node(p);
         path_last = path_last->next;
@@ -255,7 +256,7 @@ void graph::walk(Point* p)
         total_0--;
         node* temp = bfs_to_R[bfs_map[p->x][p->y]];
         node* temp1 = nullptr;
-        while(temp->data->x != p->x && temp->data->y != p->y){
+        while(temp->data->x != p->x || temp->data->y != p->y){
             temp1 = temp;
             temp = temp->next;
         }
