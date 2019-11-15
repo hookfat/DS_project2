@@ -52,7 +52,7 @@ void graph::showmap()
 void graph::BFS()
 {
     bfs_to_R = new node*[total_0];
-    node* last[total_0];
+    node** last = new node*[total_0];
     bfs_to_R[0] = new node(R_point);
     for(int i = 1; i<=total_0; i++){
         bfs_to_R[i] = nullptr;
@@ -199,6 +199,7 @@ void graph::BFS()
         else
             far_limit = i;
     }
+    delete []last;
 }
 
 void graph::show_bfs_list()
